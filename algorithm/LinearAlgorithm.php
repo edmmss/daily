@@ -1,15 +1,15 @@
 <?php
 class LinearStructure
 {
-	public $arr = [1, 2, 3, 4];
-	function __construct()
-	{
-	}
+    public $arr = [1, 2, 3, 4];
+    function __construct()
+    {
+    }
 
-	public function length()
-	{
-		return count($this->arr);
-	}
+    public function length()
+    {
+        return count($this->arr);
+    }
 
 	public function arrIsset($arr, $index)
 	{
