@@ -11,25 +11,25 @@ class LinearStructure
         return count($this->arr);
     }
 
-	public function arrIsset($arr, $index)
-	{
-		return isset($arr[$index]);
-	}
+    public function arrIsset($arr, $index)
+    {
+        return isset($arr[$index]);
+    }
 
-	public function isArrEmpty($arr)
-	{
-		return empty($arr);
-	}
+    public function isArrEmpty($arr)
+    {
+        return empty($arr);
+    }
 
-	public function clear($arr)
-	{
-		$this->arr = [];
-	}
+    public function clear($arr)
+    {
+        $this->arr = [];
+    }
 
-	public function pop()
-	{
-		$this->delete($this->length()-1);
-	}
+    public function pop()
+    {
+        $this->delete($this->length()-1);
+    }
 
 	public function shift()
 	{
