@@ -4,7 +4,6 @@ class LinearStructure
 	public $arr = [1, 2, 3, 4];
 	function __construct()
 	{
-
 	}
 
 	public function length()
