@@ -10,7 +10,7 @@ class MyPDO
     private $charset;
     private $logPath;
 
-    private $pdo;	//保存PDO类对象
+    private $pdo;	//保存PDO类的对象
 
     public function __construct($arr = array())
     {
