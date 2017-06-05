@@ -4,6 +4,7 @@ require_once('./PHPExcel-1.8.0/Classes/PHPExcel.php');
 
 try
 {
+	echo 1;
     $pdo = new PDO('mysql:host=localhost;dbname=meal;', 'root', '');
     //设置字符集
     $pdo->exec('set names utf8');
