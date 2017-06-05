@@ -1,0 +1,41 @@
+<?php
+
+$arr = range(1, 15, 1);
+shuffle($arr);
+
+// 冒泡排序
+function bubbleSort($arr)
+{
+    $len = count($arr);
+    for ($i = 0; $i < $len - 1; $i++)
+    {
+        for ($j = 0; $j < $len - 1 - $i; $j++)
+        {
+            if ($arr[$j] > $arr[$j+1])
+            {
+                $tmp = $arr[$j];
+                $arr[$j] = $arr[$j+1];
+                $arr[$j+1] = $tmp;
+            }
+        }
+    }
+    return $arr;
+}
+
+// 插入排序
+function insertSort($arr)
+{
+    $len = count($arr);
+    for ($i = 1; $i < $len; $i++)
+    {
+        $index = $i - 1;
+        $value = $arr[$i];
+        while ($index >= 0 && $arr[$index] > $value)
+        {
+            $arr[$index+1] = $arr[$index];
+            $index--;
+        }
+        $arr[$index+1] = $value;
+    }
+    return $arr;
+}
