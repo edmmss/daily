@@ -9,12 +9,10 @@
 /**
  * Cache类
  *
- * FRT_PREFIX为键值前缀,主要处理一机多服
+ * FRT_PREFIX为键值前缀, 主要处理一机多服
  *
- * @author lizhifeng,chendiming,qai41
- * @version $Id: Cache.class.php 4270 2014-05-29 07:23:39Z chendiming $
+ * @author chenbin
  * @encoding UTF-8
- * @package FrtCache
  */
 class Cache
 {
