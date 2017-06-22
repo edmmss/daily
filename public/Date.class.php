@@ -156,7 +156,7 @@ class Date{
 
         if ($type == 'week')
         {
-            $weekDate = date ( 'D', $dateStr );
+            $weekDate = date ('D', $dateStr);
             $sDate = $weekDate == 'Mon' ? date($fmt, strtotime($date)) : date ($fmt, strtotime ("last Monday", $dateStr));
             $eDate = $weekDate == 'Sun' ? date($fmt, strtotime($date)) : date ($fmt, strtotime ("next Sunday", $dateStr));
         }
