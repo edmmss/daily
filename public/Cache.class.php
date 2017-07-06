@@ -295,4 +295,29 @@ class Cache
     {
         return $this->handler->lSize( $this->prefix.$queueName );
     }
+    
+    /**
+     * 获取list在给定位置上的一个元素
+     *
+     * @param  $queueName
+     * @param  $pos         // list对应的index位置
+     * @return String
+     */
+    public function index($queueName, $pos)
+    {
+        return $this->handler->lIndex($this->prefix.$queueName, $pos);
+    }
+
+    /**
+     * 获取给定范围所有元素
+     *
+     * @param $queueName
+     * @param $start      // 开始位置
+     * @param $end        // 结束位置
+     * @return array
+     */
+    public function range($queueName, $start, $end)
+    {
+        return $this->handler->lRange($this->prefix.$queueName, $start, $end);
+    }
 }
