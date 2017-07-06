@@ -261,4 +261,38 @@ class Cache
     {
     	return $this->handler->ttl( $this->prefix.$name );
     }
+    
+     /**
+     * 入队列
+     *
+     * @param $queueName
+     * @param $data
+     * @return mixed
+     */
+    public function push( $queueName, $data )
+    {
+        return $this->handler->lPush( $this->prefix.$queueName, $data );
+    }
+
+    /**
+     * 出队列
+     *
+     * @param $queueName
+     * @return mixed
+     */
+    public function pop( $queueName )
+    {
+        return $this->handler->rPop( $this->prefix.$queueName );
+    }
+
+    /**
+     * 队列当前数据总量
+     *
+     * @param $queueName
+     * @return mixed
+     */
+    public function size( $queueName )
+    {
+        return $this->handler->lSize( $this->prefix.$queueName );
+    }
 }
