@@ -1,9 +1,8 @@
 <?php
 /**
  * Frt Http类
- * 
- * @author tim
- * @version $Id: Http.class.php 4720 2014-08-12 09:03:00Z lizhifeng $ 
+ *
+ * @author chenbin
  * @encoding UTF-8
  * @package core
  */
@@ -11,13 +10,13 @@
 class FrtHttp
 {
     // curl信息
-    public static $curlInfo = array();
-    
+    public static $curlInfo = [];
+
     public function __construct()
     {
-        
+
     }
-    
+
 	/**
      +----------------------------------------------------------
      * 下载文件
@@ -32,9 +31,9 @@ class FrtHttp
      * @param string $content  下载的内容
      * @param integer $expire  下载内容浏览器缓存时间
      +----------------------------------------------------------
-     * @return void
+     * @return string
      +----------------------------------------------------------
-     * @throws ThinkExecption
+     * @throws // ThinkExecption
      +----------------------------------------------------------
      */
     public static function download ( $showname,$content='',$expire=180 )
@@ -49,10 +48,10 @@ class FrtHttp
         header("Content-type: application/octet-stream");
         header('Content-Encoding: none');
         header("Content-Transfer-Encoding: binary" );
-        
+
         return $content;
     }
-    
+
     /**
      +----------------------------------------------------------
      * 下载服务器上已有的文件
@@ -65,7 +64,7 @@ class FrtHttp
      +----------------------------------------------------------
      * @return void
      +----------------------------------------------------------
-     * @throws ThinkExecption
+     * @throws // ThinkExecption
      +----------------------------------------------------------
      */
     public static function downloadFile($filePath,$filename = '')
@@ -73,14 +72,14 @@ class FrtHttp
 	   if(file_exists($filePath))
 	   {
 	       $filename = !empty($filename) ? $filename : basename($filePath);
-	       
+
 	       $fileSize=filesize($filePath);
 	       //修改后的http下载报头 #兼容IE
 	       header("Cache-Control:public");
 		   header("Pragma:public");
 		   header("Expires: 0");
 		   header("Content-type:application/octet-stream");
-		   header("Accept-Ranges: bytes"); 
+		   header("Accept-Ranges: bytes");
 	       self::getFilename($filename);
 	       header ("Content-Length: " . $fileSize);
 	       readfile($filePath);
@@ -90,19 +89,19 @@ class FrtHttp
 	       return false;
 	   }
 	}
-	
+
 	/**
 	 * 获取兼容各种浏览器编码格式的下载文件名
-	 * 
+	 *
 	 * 在下载文件时，由于各自终端编码格式不一直，故不能使用统一的编码格式，而需要服务端动态获取并处理
-	 * 
+	 *
 	 * @param string $filename 文件名
 	 */
 	public static function getFilename( $filename )
 	{
 		//获取当前访问的浏览器头信息
 		$ua = $_SERVER["HTTP_USER_AGENT"];
-		
+
 		//不同浏览器做差异处理
 		if(preg_match("/MSIE/", $ua) || preg_match("/Trident\/7.0/", $ua))
 		{
@@ -117,12 +116,12 @@ class FrtHttp
 			header('Content-Disposition: attachment; filename="' . $filename . '"');
 		}
 	}
-	
+
     /**
      * CURL GET方式提交数据
-     * 
+     *
      * 通过curl的get方式提交获取数据
-     * 
+     *
      * @param string $url api	  地址
      * @param int 	 $second 	  超时时间,单位为秒
      * @param array $diyParamArr 添加了自定义参数，方便各自需求扩展, demo: array( CURLOPT_TIMEOUT=>1 );
@@ -137,7 +136,7 @@ class FrtHttp
         curl_setopt($ch,CURLOPT_URL,$url);
         curl_setopt($ch,CURLOPT_POST, 0);
     	curl_setopt($ch,CURLOPT_HEADER, 0);
-        
+
     	// 遍历各种diy参数设置
 	    if( !empty($diyParamArr) )
 	    {
@@ -147,7 +146,7 @@ class FrtHttp
 	            !empty($diyK) && curl_setopt($ch, $diyK, $diyV);
 	        }
 	    }
-	    
+
         $data = curl_exec($ch);
         $return_ch = curl_errno($ch);
         self::$curlInfo = curl_getinfo($ch);//获取curl相关信息
@@ -161,12 +160,12 @@ class FrtHttp
         	return $data;
         }
     }
-    
+
     /**
      * CURL POST方式提交数据
-     * 
+     *
      * 通过curl的post方式提交获取数据
-     * 
+     *
      * @param string $url api	  地址
      * @param int 	 $second 	  超时时间,单位为秒
      * @param array $diyParamArr 添加了自定义参数，方便各自需求扩展, demo: array( CURLOPT_TIMEOUT=>1 );
@@ -181,7 +180,7 @@ class FrtHttp
     	curl_setopt($ch,CURLOPT_POSTFIELDS,$vars);
     	curl_setopt($ch,CURLOPT_POST, 1);
     	curl_setopt($ch,CURLOPT_HEADER, 0);
-    
+
     	// 遍历各种diy参数设置
 	    if( !empty($diyParamArr) )
 	    {
@@ -191,7 +190,7 @@ class FrtHttp
 	            !empty($diyK) && curl_setopt($ch, $diyK, $diyV);
 	        }
 	    }
-	    
+
     	$data = curl_exec($ch);
     	$return_ch = curl_errno($ch);
     	self::$curlInfo = curl_getinfo($ch);//获取curl相关信息
