@@ -14,7 +14,7 @@ function __autoload($className)
 }
 
 $cache = new Cache();
-$mypdo = new MyPDO(['dbname'=>'test', 'pass'=>'shazhu1314', 'host'=>'localhost']);
+$mypdo = new MyPDO(['dbname'=>'test', 'pass'=>'', 'host'=>'localhost']);
 
 $len = $cache->size('queue');
 if ($len > 0)
