@@ -164,21 +164,22 @@ class Functions
      * ssh2 执行脚本
      *
      * @author chenbin
-     * @param  $cmd
+     * @param  $cmd     // 调动shell脚本的命令
+     * @param  $type    // 资源流是否阻塞
      * @return string
      */
-    public static function ssh2Exec($cmd)
+    public static function ssh2Exec($cmd, $type = true)
     {
         $ip   = '192.168.80.10';
         $port = '22';
         $user = 'root';
-        $pass = '';
+        $pass = 'shazhu1314';
 
         $connection = ssh2_connect($ip, $port);
         ssh2_auth_password($connection, $user, $pass);
 
         $stream = ssh2_exec($connection, $cmd);
-        stream_set_blocking($stream, true);
+        stream_set_blocking($stream, $type);
         $result = stream_get_contents($stream);
 
         return $result;
