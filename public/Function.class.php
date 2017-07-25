@@ -164,7 +164,7 @@ class Functions
      * ssh2 执行脚本
      *
      * @author chenbin
-     * @param  $cmd     // 调动shell脚本的命令
+     * @param  $cmd     // 调动shell脚本的命令 如：/bin/bash -x /home/chenbin/sh/test.sh
      * @param  $type    // 资源流是否阻塞
      * @return string
      */
