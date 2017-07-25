@@ -173,7 +173,7 @@ class Functions
         $ip   = '192.168.80.10';
         $port = '22';
         $user = 'root';
-        $pass = 'shazhu1314';
+        $pass = '';
 
         $connection = ssh2_connect($ip, $port);
         ssh2_auth_password($connection, $user, $pass);
