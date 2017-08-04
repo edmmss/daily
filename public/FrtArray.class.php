@@ -29,7 +29,22 @@ class FrtArray
         }
         
     }
-    
-    
+
+    /**
+     * 将对象转为数组
+     *
+     * @author chenbin
+     * @param  $data       // 对象数据
+     * @return array|mixed
+     */
+    public static function objToAry($data)
+    {
+        if (is_object($data))
+        {
+            $data = get_object_vars($data);
+        }
+
+        return is_array($data) ? json_decode(json_encode($data), true) : $data;
+    }
 
 }
