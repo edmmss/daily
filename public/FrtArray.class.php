@@ -51,8 +51,8 @@ class FrtArray
      * 读取xml为数组
      *
      * @author chenbin
-     * @param string $filePath    xml文件路径
-     * @return array|bool|mixed   成功:返回读取后的数组, 失败:返回false
+     * @param string $filePath    // xml文件路径
+     * @return array|bool|mixed   // 成功:返回读取后的数组, 失败:返回false
      */
     public static function xmlToAry($filePath = '')
     {
