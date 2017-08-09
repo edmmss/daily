@@ -76,5 +76,48 @@ class FrtArray
             }
         }
     }
-
+ 
+   /**
+     * 获取数据某一列值
+     * （通常我们会需要一个多维数组的某一键值列的值,而不需要其他列的值,这个时候你可以使用本函数）
+     * （如果列的值为数组，则返回只是该列数组的值，键还是按照原始数组的）
+     *
+     * @author chenbin
+     * @param  array $ary    // 原始数组
+     * @param  $key          // 指定键名
+     * @return array|bool|mixed|string
+     */
+    public static function getKeyAry($array = [], $key)
+    {
+        // 如果是一维数组,就直接返回
+        if (isset($array[$key]))
+        {
+            return $array[$key];
+        }
+ 
+        // 如果是多维数组,就遍历
+        $tmp = $reThing = '';
+        if (!is_array($array))
+        {
+            return false;
+        }
+ 
+        foreach ($array as $val)
+        {
+            if (!is_array($val))
+            {
+                return false;
+            }
+ 
+            $tmp = self::getKeyAry($val, $key);
+ 
+            if ($tmp !== false)
+            {
+                $reThing[] = $tmp;
+            }
+        }
+ 
+        return !empty($reThing) ? $reThing : false;
+    }
+ 
 }
