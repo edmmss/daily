@@ -1,7 +1,9 @@
 <?php
+
 class LinearStructure
 {
     public $arr = [1, 2, 3, 4];
+
     function __construct()
     {
     }
@@ -28,144 +30,134 @@ class LinearStructure
 
     public function pop()
     {
-        $this->delete($this->length()-1);
+        $this->delete($this->length() - 1);
     }
 
-	public function shift()
-	{
-		$this->delete(0);
-	}
+    public function shift()
+    {
+        $this->delete(0);
+    }
 
-	public function push($value)
-	{
-		$this->insert($this->length(), $value);
-	}
+    public function push($value)
+    {
+        $this->insert($this->length(), $value);
+    }
 
-	public function unshift($value)
-	{
-		$this->insert(0, $value);
-	}
+    public function unshift($value)
+    {
+        $this->insert(0, $value);
+    }
 
-	public function insert($index, $value)
-	{
-		$length = $this->length();
-		if ($index < 0 || $index > $length)
-		{
-			return false;
-		}
+    public function insert($index, $value)
+    {
+        $length = $this->length();
+        if ($index < 0 || $index > $length) {
+            return false;
+        }
 
-		for ($i = $length; $i > $index; $i--)
-		{
-			$this->arr[$i] = $this->arr[$i-1];
-		}
+        for ($i = $length; $i > $index; $i--) {
+            $this->arr[$i] = $this->arr[$i - 1];
+        }
 
-		$this->arr[$index] = $value;
-		return true;
-	}
+        $this->arr[$index] = $value;
 
-	public function delete($index)
-	{
-		$length = $this->length();
-		if ($index < 0 || $index > $length - 1)
-		{
-			return false;
-		}
+        return true;
+    }
 
-		$deleteVal = $this->arr[$index]; 
+    public function delete($index)
+    {
+        $length = $this->length();
+        if ($index < 0 || $index > $length - 1) {
+            return false;
+        }
 
-		for ($i = $index; $i < $length - 1; $i++)
-		{
-			$this->arr[$i] = $this->arr[$i+1];
-		}
+        $deleteVal = $this->arr[$index];
 
-		unset($this->arr[$length-1]);
-		return $deleteVal;
-	}
+        for ($i = $index; $i < $length - 1; $i++) {
+            $this->arr[$i] = $this->arr[$i + 1];
+        }
 
-	public function update($index, $value)
-	{
-		$length = $this->length();
-		if ($index < 0 || $index > $length - 1 || !$this->arrIsset($this->arr, $index) || $this->isArrEmpty($this->arr))
-		{
-			return false;
-		}
+        unset($this->arr[$length - 1]);
 
-		$this->arr[$index] = $value;
-		return true;
-	}
+        return $deleteVal;
+    }
 
-	public function keyToValue($index)
-	{
-		$length = $this->length();
-		if ($index < 0 || $index > $length - 1)
-		{
-			return false;
-		}
+    public function update($index, $value)
+    {
+        $length = $this->length();
+        if ($index < 0 || $index > $length - 1 || !$this->arrIsset($this->arr, $index) || $this->isArrEmpty($this->arr)) {
+            return false;
+        }
 
-		$value = $this->arr[$index];
-		return $value; 
-	}
+        $this->arr[$index] = $value;
 
-	public function valueToKey($value)
-	{
-		$length = $this->length();
-		for ($i = 0; $i < $length; $i++)
-		{
-			if ($this->arr[$i] == $value)
-			{
-				return $i;
-			}
-		}
+        return true;
+    }
 
-		return false;
-	}
+    public function keyToValue($index)
+    {
+        $length = $this->length();
+        if ($index < 0 || $index > $length - 1) {
+            return false;
+        }
 
-	// 并集
-	public function union($linear1, $linear2)
-	{
-		if (!$linear1 instanceof self || !$linear2 instanceof self)
-		{
-			return false;
-		}
+        $value = $this->arr[$index];
 
-		$length  = $linear1->length();
-		$length2 = $linear2->length();
-		$tmpAry  = $linear1->arr;
+        return $value;
+    }
 
-		for ($i = $length; $i < $length + $length2; $i++)
-		{
-			$tmpAry[$i] = $linear2->arr[$i-$length];
-		}
+    public function valueToKey($value)
+    {
+        $length = $this->length();
+        for ($i = 0; $i < $length; $i++) {
+            if ($this->arr[$i] == $value) {
+                return $i;
+            }
+        }
 
-		return $tmpAry;
-	}
+        return false;
+    }
 
-	// 交集
-	public function intersection($linear1, $linear2)
-	{
-		if (!$linear1 instanceof self || !$linear2 instanceof self)
-		{
-			return false;
-		}
+    // 并集
+    public function union($linear1, $linear2)
+    {
+        if (!$linear1 instanceof self || !$linear2 instanceof self) {
+            return false;
+        }
 
-		$length  = $linear1->length();
-		$length2 = $linear2->length();
-		$tmpAry  = []; 
+        $length = $linear1->length();
+        $length2 = $linear2->length();
+        $tmpAry = $linear1->arr;
 
-		for ($i = 0; $i < $length; $i++) 
-		{ 
-			for ($k = 0; $k < $length2; $k++) 
-			{ 
-				if ($linear1->arr[$i] == $linear2->arr[$k])
-				{
-					$tmpAry[] = $linear1->arr[$i];
-					break;
-				}
-			}
-		}
+        for ($i = $length; $i < $length + $length2; $i++) {
+            $tmpAry[$i] = $linear2->arr[$i - $length];
+        }
 
-		return $tmpAry;
-	}
+        return $tmpAry;
+    }
+
+    // 交集
+    public function intersection($linear1, $linear2)
+    {
+        if (!$linear1 instanceof self || !$linear2 instanceof self) {
+            return false;
+        }
+
+        $length = $linear1->length();
+        $length2 = $linear2->length();
+        $tmpAry = [];
+
+        for ($i = 0; $i < $length; $i++) {
+            for ($k = 0; $k < $length2; $k++) {
+                if ($linear1->arr[$i] == $linear2->arr[$k]) {
+                    $tmpAry[] = $linear1->arr[$i];
+                    break;
+                }
+            }
+        }
+
+        return $tmpAry;
+    }
 
 }
 

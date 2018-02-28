@@ -9,27 +9,22 @@
 set_time_limit(0);
 function __autoload($className)
 {
-    $path = $className.'.class.php';
+    $path = $className . '.class.php';
     require_once($path);
 }
 
 $cache = new Cache();
-$mypdo = new MyPDO(['dbname'=>'test', 'pass'=>'', 'host'=>'localhost']);
+$mypdo = new MyPDO(['dbname' => 'test', 'pass' => '', 'host' => 'localhost']);
 
 $len = $cache->size('queue');
-if ($len > 0)
-{
-    for ($i = 0; $i < $len; $i++)
-    {
+if ($len > 0) {
+    for ($i = 0; $i < $len; $i++) {
         $res = $cache->pop('queue');
-        if ($res)
-        {
+        if ($res) {
             $sql = "INSERT INTO `queue` (`uid`, `update_time`) 
                     VALUES ('{$res}', NOW())";
             $mypdo->db_insert($sql);
-        }
-        else
-        {
+        } else {
             continue;
         }
         usleep(50000);

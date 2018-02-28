@@ -26,36 +26,32 @@ class Cache
      * 操作句柄
      * @var string
      */
-    protected $handler ;
+    protected $handler;
 
     /**
      * 缓存连接参数
      * @var array
      */
     protected $options = [
-    	'host'       => 'localhost',
-        'port'       => 6379,
-        'timeOut'    => 86400,
+        'host'    => 'localhost',
+        'port'    => 6379,
+        'timeOut' => 86400,
     ];
 
     /**
      * 构造函数
      */
-    public function __construct( $options=array() )
+    public function __construct($options = [])
     {
-        if ($options)
-        {
+        if ($options) {
             $this->options = &$options;
         }
 
         $this->handler = new Redis();
-        if (empty($this->handler))
-        {
+        if (empty($this->handler)) {
             echo '缓存类扩展没装好吧';
-        }
-        else
-        {
-            $this->handler->connect( $this->options['host'],$this->options['port'],$this->options['timeOut'] ) ;
+        } else {
+            $this->handler->connect($this->options['host'], $this->options['port'], $this->options['timeOut']);
         }
     }
 
@@ -65,9 +61,9 @@ class Cache
      * @param string $name 缓存变量名
      * @return mixed
      */
-    public function get( $name , $isSerialize = true)
+    public function get($name, $isSerialize = true)
     {
-        return $isSerialize ? unserialize($this->handler->get( $this->prefix.$name )) : ($this->handler->get( $this->prefix.$name ));
+        return $isSerialize ? unserialize($this->handler->get($this->prefix . $name)) : ($this->handler->get($this->prefix . $name));
     }
 
     /**
@@ -82,8 +78,7 @@ class Cache
     {
         is_null($expire) && ($expire = $this->options['timeOut']);
 
-        if ( $this->handler->setex( $this->prefix.$name, $expire, serialize($value) ) )
-        {
+        if ($this->handler->setex($this->prefix . $name, $expire, serialize($value))) {
             return true;
         }
 
@@ -103,9 +98,9 @@ class Cache
         is_null($expire) && ($expire = $this->options['timeOut']);
 
         // setnx 就相当于memcache的add,但不能直接设置有效期
-        if ( $this->handler->setnx( $this->prefix.$name,serialize($value) ) )
-        {
-            $this->handler->expire( $this->prefix.$name,$expire ); //设置有效期
+        if ($this->handler->setnx($this->prefix . $name, serialize($value))) {
+            $this->handler->expire($this->prefix . $name, $expire); //设置有效期
+
             return true;
         }
 
@@ -120,7 +115,7 @@ class Cache
      */
     public function delete($name)
     {
-        return $this->handler->delete($this->prefix.$name);
+        return $this->handler->delete($this->prefix . $name);
     }
 
     /**
@@ -139,9 +134,9 @@ class Cache
      * @param string $key 键
      * @return boolean true 存在，false 不存在
      */
-    public function keyExists( $key )
+    public function keyExists($key)
     {
-        return $this->handler->exists( $this->prefix.$key );
+        return $this->handler->exists($this->prefix . $key);
     }
 
     /**
@@ -151,14 +146,11 @@ class Cache
      * @param string $hashKey hash表的键
      * @return string|boolean 如果成功获取则返回值的内容；hash表不存在，或者hash键不存在，则返回false
      */
-    public function hashGet( $key, $hashKey )
+    public function hashGet($key, $hashKey)
     {
-        if ($hashData = $this->handler->hget( $this->prefix.$key, $hashKey ))
-        {
+        if ($hashData = $this->handler->hget($this->prefix . $key, $hashKey)) {
             return unserialize($hashData);
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -171,9 +163,9 @@ class Cache
      * @param string $value 要储存的值
      * @return integer|boolean 1 如果值不存在并且成功添加；0 值已经存在并且成功替换；false 出错
      */
-    public function hashSet( $key, $hashKey, $value )
+    public function hashSet($key, $hashKey, $value)
     {
-        return $this->handler->hSet( $this->prefix.$key, $hashKey, serialize($value) );
+        return $this->handler->hSet($this->prefix . $key, $hashKey, serialize($value));
     }
 
     /**
@@ -184,13 +176,13 @@ class Cache
      * @param integer $expire
      * @return boolean 设置hash表内容和设置有效时间都成功返回true，否则返回false
      */
-    public function hashMSet( $key, $members, $expire )
+    public function hashMSet($key, $members, $expire)
     {
-        foreach ($members as $k => $v)
-        {
+        foreach ($members as $k => $v) {
             $members[$k] = serialize($v);
         }
-        return $this->handler->hMset( $this->prefix.$key, $members) && $this->handler->expire( $this->prefix.$key, $expire );
+
+        return $this->handler->hMset($this->prefix . $key, $members) && $this->handler->expire($this->prefix . $key, $expire);
     }
 
     /**
@@ -200,18 +192,15 @@ class Cache
      * @return array hash表的内容
      * @return array 以数组的方式返回整个hash表的内容
      */
-    public function hashGetAll( $key )
+    public function hashGetAll($key)
     {
-        if ($hashData = $this->handler->hGetAll( $this->prefix.$key ))
-        {
-            foreach ($hashData as $key => $value)
-            {
+        if ($hashData = $this->handler->hGetAll($this->prefix . $key)) {
+            foreach ($hashData as $key => $value) {
                 $hashData[$key] = unserialize($value);
             }
+
             return $hashData;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -223,9 +212,9 @@ class Cache
      * @param string $memberKey hash的键
      * @return boolean 存在则返回true，不存在则返回false
      */
-    public function hashExists( $key, $memberKey )
+    public function hashExists($key, $memberKey)
     {
-        return $this->handler->hExists( $this->prefix.$key, $memberKey );
+        return $this->handler->hExists($this->prefix . $key, $memberKey);
     }
 
     /**
@@ -234,9 +223,9 @@ class Cache
      * @param string $key 缓存的KEY值,*表示所有
      * @return array
      */
-    public function keys( $key )
+    public function keys($key)
     {
-        return $this->handler->keys( $this->prefix.$key );
+        return $this->handler->keys($this->prefix . $key);
     }
 
     /**
@@ -246,9 +235,9 @@ class Cache
      * @param string $memberKey hash的域(在Redis2.4及以上的版本，可以删除多个域，用空格隔开)
      * @return boolean 存在则返回true，不存在则返回false
      */
-    public function hashDel( $key,$memberKey )
+    public function hashDel($key, $memberKey)
     {
-        return $this->handler->HDEL( $this->prefix.$key, $memberKey);
+        return $this->handler->HDEL($this->prefix . $key, $memberKey);
     }
 
     /**
@@ -257,21 +246,21 @@ class Cache
      * @param string $name 缓存变量名
      * @return int 剩余时间秒(如果已过期则返回-1)
      */
-    public function ttl( $name )
+    public function ttl($name)
     {
-    	return $this->handler->ttl( $this->prefix.$name );
+        return $this->handler->ttl($this->prefix . $name);
     }
-    
-     /**
+
+    /**
      * 入队列
      *
      * @param $queueName
      * @param $data
      * @return mixed
      */
-    public function push( $queueName, $data )
+    public function push($queueName, $data)
     {
-        return $this->handler->lPush( $this->prefix.$queueName, $data );
+        return $this->handler->lPush($this->prefix . $queueName, $data);
     }
 
     /**
@@ -280,9 +269,9 @@ class Cache
      * @param $queueName
      * @return mixed
      */
-    public function pop( $queueName )
+    public function pop($queueName)
     {
-        return $this->handler->rPop( $this->prefix.$queueName );
+        return $this->handler->rPop($this->prefix . $queueName);
     }
 
     /**
@@ -291,33 +280,33 @@ class Cache
      * @param $queueName
      * @return mixed
      */
-    public function size( $queueName )
+    public function size($queueName)
     {
-        return $this->handler->lSize( $this->prefix.$queueName );
+        return $this->handler->lSize($this->prefix . $queueName);
     }
-    
+
     /**
      * 获取list在给定位置上的一个元素
      *
      * @param  $queueName
-     * @param  $pos         // list对应的index位置
+     * @param  $pos // list对应的index位置
      * @return String
      */
     public function index($queueName, $pos)
     {
-        return $this->handler->lIndex($this->prefix.$queueName, $pos);
+        return $this->handler->lIndex($this->prefix . $queueName, $pos);
     }
 
     /**
      * 获取给定范围所有元素
      *
      * @param $queueName
-     * @param $start      // 开始位置
-     * @param $end        // 结束位置
+     * @param $start // 开始位置
+     * @param $end // 结束位置
      * @return array
      */
     public function range($queueName, $start, $end)
     {
-        return $this->handler->lRange($this->prefix.$queueName, $start, $end);
+        return $this->handler->lRange($this->prefix . $queueName, $start, $end);
     }
 }

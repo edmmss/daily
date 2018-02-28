@@ -1,9 +1,11 @@
-<?php 
+<?php
+
 class Node_linked
 {
     public $data;
-    public $next = NULL;
-    public function __construct($value = NULL)
+    public $next = null;
+
+    public function __construct($value = null)
     {
         $this->data = $value;
     }
@@ -11,12 +13,13 @@ class Node_linked
     public function update($newValue)
     {
         $this->data = $newValue;
-    } 
+    }
 }
 
 class Linear_linked
 {
     protected $_head;
+
     public function __construct()
     {
         $this->_head = new Node_linked();
@@ -24,7 +27,7 @@ class Linear_linked
 
     public function head()
     {
-    	return $this->_head;
+        return $this->_head;
     }
 
     public function length()
@@ -32,8 +35,7 @@ class Linear_linked
         $length = 0;
         $prev = $this->head();
 
-        while ($prev->next)
-        {
+        while ($prev->next) {
             $prev = $prev->next;
             $length++;
         }
@@ -44,16 +46,14 @@ class Linear_linked
     public function insert($value, $index)
     {
         $length = $this->length();
-        if ($index < 0 || $index > $length)
-        {
+        if ($index < 0 || $index > $length) {
             return false;
         }
 
         $node = new Node_linked($value);
         $prev = $this->head();
 
-        for ($i = 0; $i < $index; $i++)
-        {
+        for ($i = 0; $i < $index; $i++) {
             $prev = $prev->next;
         }
 
