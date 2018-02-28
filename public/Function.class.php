@@ -171,7 +171,7 @@ class Functions
     /**
      * 字符串截取函数
      *
-     * @autoho chenbin
+     * @author chenbin
      * @param string $str 需要被切割的字符串
      * @param int $length 需要保留的字符串长度(汉字的话,就是汉字个数),为0时:表示从$start截取到结尾
      * @param string $dot 超过时显示的符号
@@ -194,6 +194,77 @@ class Functions
         }
 
         return join("", array_slice($match[0], $start, $length));
+    }
+
+    /**
+     * 读取excel文件数据
+     *
+     * @author chenbin
+     * @param $file // excel文件路径
+     * @param int $startRow // 数据开始行数(非header数据开始行数)
+     * @param array $colKey // 自定义列key名(不传入则使用header(第一行)col 字段作key)
+     * @return array|bool
+     */
+    public static function getDataFromExcelFile($file, $startRow = 2, $colKey = [])
+    {
+        // 检查excel文件并尝试打开文件读入数据到 $data 并返回
+        do { // if 出错 break
+            $phpReader = new \PHPExcel_Reader_Excel2007();
+            if (!$phpReader->canRead($file)) {
+                // excel2007打不开, 尝试用excel5打开
+                $phpReader = new \PHPExcel_Reader_Excel5();
+                if (!$phpReader->canRead($file)) {
+                    break; // 打开excel文件失败
+                }
+            }
+
+            // 允许打开
+            $phpExcel = $phpReader->load($file);
+            // 获取表中的第一个工作表，如果要获取第二个，把0改为1，依次类推
+            $sheet = $phpExcel->getSheet(0);
+            // excel总行数
+            $allRow = $sheet->getHighestRow();
+            // excel总列数(A B C....)
+            $allColumn = $sheet->getHighestColumn();
+
+            $data = []; // 要返回的数据, 二维数组
+            if (!$colKey) { // 没有自定义列key
+                for ($currentColumn = 'A'; $currentColumn <= $allColumn; $currentColumn++) { // 列
+                    $colKey[] = $phpExcel->getActiveSheet()->getCell($currentColumn . '1')->getValue();
+                }
+            }
+
+            $goalAllColumn = chr(ord('A') + count($colKey) - 1); // 目标总列数(rowKey的总条数)(A B C....)
+            if ($allColumn != $goalAllColumn) {
+                break; // 校验列数
+            }
+            // 获取数据
+            for ($currentRow = $startRow; $currentRow <= $allRow; $currentRow++) { //  行
+                $dataOneDimensionalIndex = $currentRow - $startRow; // data数组一维下标
+                $emptyLine = true; // 是否空行
+                for ($currentColumn = 'A'; $currentColumn <= $allColumn; $currentColumn++) { // 列
+                    $dataTwoDimensionalIndex = $colKey[ord($currentColumn) - ord('A')]; // data数组二维下标
+
+                    $data[$dataOneDimensionalIndex][$dataTwoDimensionalIndex] = $phpExcel->getActiveSheet()->getCell($currentColumn . $currentRow)->getValue();
+                    // 用''填充null
+                    if (!$data[$dataOneDimensionalIndex][$dataTwoDimensionalIndex]) {
+                        $data[$dataOneDimensionalIndex][$dataTwoDimensionalIndex] = '';
+                    }
+
+                    if ($emptyLine && $data[$dataOneDimensionalIndex][$dataTwoDimensionalIndex]) {
+                        $emptyLine = false;
+                    }
+                }
+
+                if ($emptyLine) {
+                    unset($data[$dataOneDimensionalIndex]);
+                }
+            }
+
+            return $data;
+        } while (0);
+
+        return false;
     }
 }
 
