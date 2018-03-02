@@ -115,8 +115,8 @@ class FrtHttp
      * @author chenbin
      * @param $url // 请求url
      * @param int $second // 超时时间
-     * @param array $customExpansion // 添加了自定义参数，方便各自需求扩展, demo: array( CURLOPT_TIMEOUT=>1 );
-     * @return bool|mixed
+     * @param array $customExpansion // 添加了自定义参数，方便各自需求扩展, demo: $customExpansion[CURLOPT_TIMEOUT] = 30;
+     * @return array
      */
     public static function curlGet($url, $second = 30, $customExpansion = [])
     {
@@ -137,14 +137,24 @@ class FrtHttp
             }
         }
 
-        $data = curl_exec($ch);
-        $return_ch = curl_errno($ch);
-        self::$curlInfo = curl_getinfo($ch);//获取curl相关信息
+        $result = curl_exec($ch);
+        $curlErrorNo = curl_errno($ch);
+        $curlErrorInfo = curl_errno($ch);
+        $curlInfo = curl_getinfo($ch);
         curl_close($ch);
-        if ($return_ch != 0) {
-            return false;
+
+        if ($curlErrorNo == 0) {
+            return [
+                'operation' => true,
+                'dataInfo'  => $result,
+            ];
         } else {
-            return $data;
+            return [
+                'operation'     => false,
+                'curlErrorNo'   => $curlErrorNo,
+                'curlErrorInfo' => $curlErrorInfo,
+                'curlInfo'      => $curlInfo,
+            ];
         }
     }
 
@@ -155,16 +165,16 @@ class FrtHttp
      * @param $url // 请求url
      * @param $postData // post的数据
      * @param int $second // 超时时间
-     * @param array $customExpansion // 添加了自定义参数，方便各自需求扩展, demo: array( CURLOPT_TIMEOUT=>1 );
-     * @return bool|mixed
+     * @param array $customExpansion // 添加了自定义参数，方便各自需求扩展, demo: $customExpansion[CURLOPT_TIMEOUT] = 30;
+     * @return array
      */
     public static function curlPost($url, $postData, $second = 30, $customExpansion = [])
     {
         $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($postData));
         curl_setopt($ch, CURLOPT_TIMEOUT, $second);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postData);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_HEADER, 0);
 
@@ -178,14 +188,24 @@ class FrtHttp
             }
         }
 
-        $data = curl_exec($ch);
-        $return_ch = curl_errno($ch);
-        self::$curlInfo = curl_getinfo($ch);//获取curl相关信息
+        $result = curl_exec($ch);
+        $curlErrorNo = curl_errno($ch);
+        $curlErrorInfo = curl_errno($ch);
+        $curlInfo = curl_getinfo($ch);
         curl_close($ch);
-        if ($return_ch != 0) {
-            return false;
+
+        if ($curlErrorNo == 0) {
+            return [
+                'operation' => true,
+                'dataInfo'  => $result,
+            ];
         } else {
-            return $data;
+            return [
+                'operation'     => false,
+                'curlErrorNo'   => $curlErrorNo,
+                'curlErrorInfo' => $curlErrorInfo,
+                'curlInfo'      => $curlInfo,
+            ];
         }
     }
 }
