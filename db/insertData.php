@@ -1,6 +1,5 @@
 <?php
-public
-function sendMail($dataAry)
+public function sendMail($dataAry)
 {
     $num = 500;
     $count = count($dataAry);
